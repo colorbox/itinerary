@@ -8,12 +8,9 @@ app.innerHTML = `
   <p></p>
 `
 
-
 chrome.windows.getAll(
     {populate: true},
      (windows: Window[]) => {
-         console.log('AAAAAAAAA');
-
 
          let count = 0;
          windows.forEach(function(window: Window){
@@ -22,12 +19,17 @@ chrome.windows.getAll(
 
          console.log(count);
 
-    },
+
+         let key = new Date().getTime().toString();
+         let value = count.toString();
+         console.log(key);
+         chrome.storage.local.set({ [key]: value }).then(() => {
+             console.log(key + " Value is set to " + count.toString());
+         });
+     },
 );
 
-async function getCurrentTab() {
-    let queryOptions = { active: true, lastFocusedWindow: true };
-    // `tab` will either be a `tabs.Tab` instance or `undefined`.
-    let [tab] = await chrome.tabs.query(queryOptions);
-    return tab;
-}
+chrome.storage.local.get(null, ( content ) => {
+    console.log(content);
+});
+
