@@ -9,10 +9,8 @@ chrome.tabs.onCreated.addListener(
 chrome.tabs.onRemoved.addListener(
     () => {
       saveCount();
-
     }
 )
-
 
 function saveCount(){
   chrome.windows.getAll(
