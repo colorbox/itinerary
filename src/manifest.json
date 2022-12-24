@@ -1,10 +1,10 @@
 {
-  "name": "itinerary",
-  "description": "record tab count",
+  "name": "chrome tab count recorder",
+  "description": "record chrome tab count, you ca track tab count and so on",
   "manifest_version": 3,
   "version": "0.0.1",
-  "chrome_url_overrides": {
-    "newtab": "index.html"
+  "action": {
+    "default_popup": "src/popup.html"
   },
   "background": {
     "service_worker": "src/service.ts"
