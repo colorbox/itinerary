@@ -1,7 +1,5 @@
 import './style.css'
 
-import {countsKey} from "./constants";
-
 chrome.storage.local.get(null, ( content ) => {
     let counts = [];
     for(let k in content){

@@ -1,5 +1,3 @@
-import {countsKey} from "./constants";
-
 chrome.tabs.onCreated.addListener(
     () => {
       saveCount();
@@ -15,11 +13,13 @@ chrome.tabs.onRemoved.addListener(
 function saveCount(){
   chrome.windows.getAll(
     {populate: true},
-    (windows: Window[]) => {
+    (windows: chrome.windows.Window[]) => {
 
       let count = 0;
-      windows.forEach(function(window: Window){
-        count += window.tabs.length;
+      windows.forEach(function(window: chrome.windows.Window){
+        if(window.tabs != undefined){
+          count += window.tabs.length;
+        }
       });
 
       console.log(count);
