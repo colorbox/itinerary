@@ -4,7 +4,7 @@ chrome.storage.local.get(null, ( content ) => {
     let counts = [];
     for(let k in content){
         let d = new Date(+k);
-        counts.push([`${d.getFullYear()}/${d.getMonth()}/${d.getDate()} ${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}`, content[k]]);
+        counts.push([`${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()} ${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}`, content[k]]);
     }
 
     let table = document.createElement('table')
