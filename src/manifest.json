@@ -2,7 +2,7 @@
   "name": "chrome tab count recorder",
   "description": "record chrome tab count, you ca track tab count and so on",
   "manifest_version": 3,
-  "version": "0.0.1",
+  "version": "0.0.2",
   "icons": {
     "16": "images/icon_16.png",
     "32": "images/icon_32.png",
