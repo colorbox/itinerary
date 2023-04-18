@@ -12,5 +12,9 @@
     "@types/chrome": "^0.0.193",
     "typescript": "^4.5.4",
     "vite": "^2.9.0"
+  },
+  "dependencies": {
+    "chart.js": "^3.7.1",
+    "chartjs-adapter-date-fns": "^3.0.0"
   }
 }

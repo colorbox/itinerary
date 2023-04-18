@@ -1,26 +1,69 @@
 import './style.css'
+import { Chart, LinearScale, LineController, PointElement, LineElement, Title, Tooltip, TimeScale } from 'chart.js';
+import 'chartjs-adapter-date-fns';
+
+function prepareGraphData(tabData: { [timestamp: string]: number }): { labels: number[], data: number[] } {
+    const oneDayAgo = Date.now() - 86400 * 1000 * 400;
+    const filteredData = Object.entries(tabData)
+      .filter(([timestamp, _]) => parseInt(timestamp) >= oneDayAgo)
+      .sort((a, b) => parseInt(a[0]) - parseInt(b[0]));
+
+    const labels = filteredData.map(([timestamp, _]) => parseInt(timestamp));
+    const data = filteredData.map(([_, count]) => count);
+
+    return { labels, data };
+}
+
+function drawGraph(labels: number[], data: number[]) {
+    const ctx = (document.getElementById('tabCountChart') as HTMLCanvasElement).getContext('2d');
+    if (ctx === null) {
+        console.error('Failed to get canvas context');
+        return;
+    }
+
+    Chart.register(LineController, LinearScale, PointElement, LineElement, Title, Tooltip, TimeScale);
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'tabs',
+                    data: data,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            scales: {
+                x: {
+                    type: 'time',
+                    time: {
+                        unit: 'day',
+                        displayFormats: {
+                            day: 'yyyy/MM/dd'
+                        }
+                    },
+                    title: {
+                        display: true,
+                        text: 'time'
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'tabs'
+                    }
+                }
+            }
+        }
+    });
+}
 
 chrome.storage.local.get(null, ( content ) => {
-    let counts = [];
-    for(let k in content){
-        let d = new Date(+k);
-        counts.push([`${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()} ${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}`, content[k]]);
-    }
-
-    let table = document.createElement('table')
-    for(let count in counts.reverse()){
-        let tr = document.createElement('tr');
-        let tdDate = document.createElement('td')
-        tdDate.append(counts[count][0]);
-        tr.append(tdDate)
-
-        let tdCount = document.createElement('td')
-        tdCount.append(counts[count][1]);
-        tr.append(tdCount)
-
-        table.append(tr);
-    }
-    const app = document.querySelector<HTMLDivElement>('#app')!;
-    app.append(table)
-
+    const { labels, data } = prepareGraphData(content)
+    drawGraph(labels, data)
 });
